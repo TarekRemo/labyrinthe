@@ -1,4 +1,4 @@
-#include "../include/generator.h"
+#include "generator.h"
 
 #include <stdio.h>
 #include <stdlib.h>
