@@ -39,21 +39,12 @@ Labyrinth* generate_labyrinth(Difficulty difficulty, int height, int width){
     height = height <= 0 ? DEFAULT_LABYRINTH_HEIGHT : height;
     width = width <= 0 ? DEFAULT_LABYRINTH_WIDTH : width;
 
-    if(height < 3 || width < 3){
+    if(!is_valid_labyrinth_params(difficulty, height, width)){
         fprintf(stderr, "La taille minimale du labyrinthe est de 3x3\n");
-        return NULL;
-    }
-
-    //vérifier que la hauteur et la largeur sont impaires
-    if(height%2 == 0 || width%2 == 0){
         fprintf(stderr, "La hauteur et la largeur du labyrinthe doivent être impaires\n");
-        return NULL;
-    }
-
-    //Vérifier que la difficulté choisie est reconnue
-    if(difficulty != EASY && difficulty != HARD){
         fprintf(stderr, "La difficulté %d choisie n'est pas reconnue\n", difficulty);
-        return NULL;  
+        
+        return NULL;
     }
 
     Labyrinth* labyrinth = malloc(sizeof(Labyrinth));

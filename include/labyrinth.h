@@ -37,4 +37,15 @@ typedef struct Labyrinth {
     Cell** cells;
 } Labyrinth;
 
+/**
+ * Permet de vérifier si les paramètres d'un labyrinthe sont valides.
+ * 
+ * @param difficulty la difficulté d'un labyrinthe
+ * @param height la hauteur du labyrinthe
+ * @param width la largeur du labyrinthe
+ * 
+ * @return 1 si les paramètres sont valides, 0 sinon.
+ */
+int is_valid_labyrinth_params(Difficulty difficulty, int height, int width);
+
 #endif
