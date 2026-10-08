@@ -2,7 +2,7 @@ CC = gcc
 CPPFLAGS = -Iinclude
 CFLAGS = -Wall -Wextra -Wpedantic
 EXEC = bin/labyrinth.out
-OBJ = build/main.o build/generator.o
+OBJ = build/main.o build/generator.o build/labyrinth.o build/cfg_io.o
 
 .PHONY: all clean
 
@@ -21,6 +21,8 @@ build/main.o: src/*.c include/*.h
 
 # Dépendnaces des autres fichiers .o
 build/generator.o: include/generator.h include/labyrinth.h
+build/labyrinth.o: include/labyrinth.h
+build/cfg_io.o: include/cfg_io.h include/labyrinth.h
 
 clean: 
 	rm -rf build/* bin/*

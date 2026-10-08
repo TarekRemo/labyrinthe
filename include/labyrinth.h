@@ -48,4 +48,13 @@ typedef struct Labyrinth {
  */
 int is_valid_labyrinth_params(Difficulty difficulty, int height, int width);
 
+/**
+ * Permet d'obtenir le caractère représentant le contenu d'une cellule.
+ * 
+ * @param content le contenu de la cellule.
+ * 
+ * @return le caractère représentant graphiquement cette cellule.
+ */
+char get_cell_representation(Cell content);
+
 #endif
