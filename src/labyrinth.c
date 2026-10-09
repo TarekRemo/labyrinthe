@@ -1,4 +1,16 @@
+#include <stdlib.h>
 #include "labyrinth.h"
+
+void free_labyrinth(Labyrinth* labyrinth){
+    if(labyrinth != NULL){
+        for(int line = 0 ; labyrinth->height > line ; line++){
+            free(labyrinth->cells[line]);
+        }
+
+        free(labyrinth->cells);
+        free(labyrinth);
+    }
+}
 
 int is_valid_labyrinth_params(Difficulty difficulty, int height, int width){
     return height >= 3 && 

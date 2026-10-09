@@ -21,18 +21,35 @@ typedef enum LabyrinthIOStatus{
 }LabyrinthIOStatus;
 
 /**
- * Enregistre un labyrinthe dans un fichier .cfg.
+ * Enregistre un labyrinthe dans un fichier .cfg dans le dossier SAVE_PATH.
+ * Si un labyrinthe avec le même nom existe déjà, la sauvegarde échoue. 
+ * 
  * 
  * @param name le nom du labyrinthe. Ce nom sera aussi le nom du fichier dans lequel le labyrinthe est enregistré.
  * @param labyrinth pointeur vers le labyrinthe à enregistrer. 
+ * 
+ * @return LabyrinthIOStatus un état représentant le résultat de l'opération de sauvegarde: 
+ *  - LABYRINTH_IO_SUCCESS si l'opération est réussie
+ *  - LABYRINTH_IO_PERMISSION_ERROR si une erreur de permissions empêche la sauvegarde
+ *  - LABYRINTH_IO_CORRUPTED si les paramètres du labyrinthe sont invalides
+ *  - LABYRINTH_IO_INVALID_NAME si le nom est invalide
+ *  - LABYRINTH_IO_INVALID_FORMAT si le dossier de sauvegarde n'existe pas et 
+ *         qu'il est impossible de le créer car un fichier du même nom existe
+ *  - LABYRINTH_IO_ALREADY_EXISTS si un labyrinthe avec le même nom existe déjà
+ *  - LABYRINTH_IO_UNKNOWN si l'opération échoue pour d'autres raisons
  */
 LabyrinthIOStatus save_labyrinth(char* name, Labyrinth* labyrinth);
 
 /**
- * Permet de charger un labyrinthe depuis un fichier cfg.
+ * Permet de charger un labyrinthe depuis un fichier cfg. Ce labyrinthe doit être présent dans le dossier SAVE_PATH.
  * 
- * @param name le nom du labyrinth à recharger. Celui-ci doit être le même que celui du fichier cfg dans lequel le labyrinth est enregisré.
+ * @param name le nom du labyrinth à charger. Celui-ci doit être le même que celui du fichier cfg dans lequel le labyrinth est enregisré.
+ * @param labyrinth pointeur vers Labyrinth qui contienadra les informations du labyrinthe chargé. 
+ *                  La mémoire occupée par cette variable sera allouée dynamiquement et donc il faut la libérer avec free_labyrinth().
+ *                  Si le chargement échoue, la valeur de ce pointeur sera NULL
+ * 
+ * @return LabyrinthIOStatus un état représentant le résultat de l'opération de chargement. 
  */
-Labyrinth* load_labyrinth(char* name, int load_state);
+LabyrinthIOStatus load_labyrinth(char* name, Labyrinth* labyrinth);
 
 #endif

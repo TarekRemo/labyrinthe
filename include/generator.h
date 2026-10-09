@@ -25,13 +25,4 @@
  */
 Labyrinth* generate_labyrinth(Difficulty difficulty, int height, int width);
 
-/**
- * Permet de libérer la mémoire alloué pour un labyrinthe
- * 
- * @param labyrinth pointeur vers le labyrinthe à libérer
- * 
- * @return void
- */
-void free_labyrinth(Labyrinth* labyrinth);
-
 #endif

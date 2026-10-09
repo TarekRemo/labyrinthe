@@ -91,17 +91,6 @@ Labyrinth* generate_labyrinth(Difficulty difficulty, int height, int width){
     return labyrinth;
 }
 
-void free_labyrinth(Labyrinth* labyrinth){
-    if(labyrinth != NULL){
-        for(int line = 0 ; labyrinth->height > line ; line++){
-            free(labyrinth->cells[line]);
-        }
-
-        free(labyrinth->cells);
-        free(labyrinth);
-    }
-}
-
 int construct_labyrinth(Labyrinth* labyrinth){
     if(labyrinth == NULL || labyrinth->cells == NULL){
         return 0;

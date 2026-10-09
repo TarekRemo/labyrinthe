@@ -24,11 +24,11 @@ typedef enum Difficulty {
 } Difficulty;
 
 /**
- * Structure représentant un labyrinth
- * @var int height la hauteur du labyrinth
- * @var int width la largeur du labyrinth
- * @var Difficulty la difficulté du labyrinth
- * @var cell** cells un tableau 2D contenant les cellules du labyrinth                
+ * Structure représentant un labyrinthe
+ * @var int height la hauteur du labyrinthe
+ * @var int width la largeur du labyrinthe
+ * @var Difficulty la difficulté du labyrinthe
+ * @var cell** cells un tableau 2D contenant les cellules du labyrinthe             
  */
 typedef struct Labyrinth {
     int height;
@@ -36,6 +36,15 @@ typedef struct Labyrinth {
     Difficulty difficulty;
     Cell** cells;
 } Labyrinth;
+
+/**
+ * Permet de libérer la mémoire alloué pour un labyrinthe
+ * 
+ * @param labyrinth pointeur vers le labyrinthe à libérer
+ * 
+ * @return void
+ */
+void free_labyrinth(Labyrinth* labyrinth);
 
 /**
  * Permet de vérifier si les paramètres d'un labyrinthe sont valides.
