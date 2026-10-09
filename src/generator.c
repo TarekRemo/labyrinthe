@@ -47,40 +47,11 @@ Labyrinth* generate_labyrinth(Difficulty difficulty, int height, int width){
         return NULL;
     }
 
-    Labyrinth* labyrinth = malloc(sizeof(Labyrinth));
+    Labyrinth* labyrinth  = allocate_labyrinth(difficulty, height, width);
     if(labyrinth == NULL){
         fprintf(stderr, "Impossible d'allouer la mémoire nécessaire pour la génération du labyrinthe\n");
         return NULL;
     }
-
-    //Allocation des lignes du tableau 2D des cellules
-    labyrinth->cells = malloc(height * sizeof(Cell*));
-    if(labyrinth->cells == NULL){
-        fprintf(stderr, "Impossible d'allouer la mémoire nécessaire pour la génération du labyrinthe\n");
-        free(labyrinth);
-        return NULL;
-    }
-
-    //Allocation des colonnes de chaque ligne du tableau 2D des cellules
-    for(int line = 0 ; height > line ; line++){
-        labyrinth->cells[line] = malloc(width * sizeof(Cell));
-
-        if(labyrinth->cells[line] == NULL){
-            fprintf(stderr, "Impossible d'allouer la mémoire nécessaire pour la génération du labyrinthe\n");
-            for(int i = 0 ; line > i ; i++){
-                free(labyrinth->cells[i]);
-            }
-
-            free(labyrinth->cells);
-            free(labyrinth);
-
-            return NULL;
-        }
-    }
-
-    labyrinth->height = height;
-    labyrinth->width = width;
-    labyrinth->difficulty = difficulty;
 
     if(construct_labyrinth(labyrinth) == 0){
         fprintf(stderr, "Impossible de construire le labyrinthe\n");

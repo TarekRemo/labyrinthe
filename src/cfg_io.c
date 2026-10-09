@@ -6,6 +6,7 @@
 #include <errno.h>
 #include <string.h>
 #include "cfg_io.h"
+#include "utils.h"
 
 /**
  * Permet de vérifier que le dossier de sauvegarde existe et est accessible, le crée sinon.
@@ -102,6 +103,98 @@ LabyrinthIOStatus save_labyrinth(char* name, Labyrinth* labyrinth){
 
     return LABYRINTH_IO_SUCCESS;
 }
+
+LabyrinthIOStatus load_labyrinth(char* name, Labyrinth* labyrinth){
+    labyrinth = NULL;
+
+    if(!is_valid_labyrinth_name(name)){
+        return LABYRINTH_IO_INVALID_NAME;
+    }
+
+    char* file_path = malloc(strlen(SAVE_PATH) + strlen(name) + 5);
+    strcpy(file_path, SAVE_PATH); 
+    strcat(file_path, name);
+    strcat(file_path, ".cfg");
+
+    if(check_save_folder() != LABYRINTH_IO_SUCCESS || !file_exists(file_path)){
+        free(file_path);
+        return LABYRINTH_IO_NOT_FOUND;
+    }
+
+    FILE* save_file = fopen(file_path, "r");
+    free(file_path); //on n'en a plus besoin
+    if(save_file == NULL){
+        fclose(save_file);
+        return LABYRINTH_IO_UNKNOWN;
+    }
+
+    //Ignorer la 1ère ligne contenant le nom
+    char name_line[MAX_LABYRINTH_NAME_LENGTH + 2];   // nom + '\n' + '\0'
+    if(fgets(name_line, sizeof(name_line), save_file) == NULL){
+        fclose(save_file);
+        return LABYRINTH_IO_INVALID_FORMAT;
+    }
+
+    int difficulty, height, width;
+    if(
+        !read_int(save_file, &difficulty) || 
+        !read_int(save_file, &height) ||
+        !read_int(save_file, &width) 
+    ){
+        fclose(save_file);
+        return LABYRINTH_IO_INVALID_FORMAT;
+    }
+
+    if(!is_valid_labyrinth_params(difficulty, height, width)){
+        fclose(save_file);
+        return LABYRINTH_IO_CORRUPTED;
+    }
+
+    labyrinth = allocate_labyrinth(difficulty, height, width);
+    if(labyrinth == NULL){
+        fclose(save_file);
+        return LABYRINTH_IO_MEMORY_ERROR;
+    }
+
+    char c;
+    Cell content;
+    for(int line = 0 ; height > line ; line++){
+        for(int col = 0 ; width > col ; col++){
+            c=fgetc(save_file);
+
+            //caractères non attendu
+            if( (content = get_cell(c)) == -1 ){
+                free_labyrinth(labyrinth);
+                fclose(save_file);
+                return LABYRINTH_IO_INVALID_FORMAT;
+            }
+
+            labyrinth->cells[line][col] = content;
+        }
+
+        c=fgetc(save_file);
+
+        //retour à la ligne obligatoire à la fin de chaque ligne sauf pour la dernière ligne 
+        if(line < height-1){
+            if(c != '\n'){
+                free_labyrinth(labyrinth);
+                fclose(save_file);
+                return LABYRINTH_IO_INVALID_FORMAT;
+            }
+        }
+        //fin de fichier ou retour à la ligne obligatoire pour la dernière ligne
+        else{
+            if(c != '\n' && c != EOF && c != '\0'){
+                free_labyrinth(labyrinth);
+                fclose(save_file);
+                return LABYRINTH_IO_INVALID_FORMAT;
+            }
+        }
+    }
+
+    return LABYRINTH_IO_SUCCESS;
+}
+
 
 static LabyrinthIOStatus check_save_folder(void){
     struct stat st = {0};   

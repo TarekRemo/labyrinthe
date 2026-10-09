@@ -38,6 +38,20 @@ typedef struct Labyrinth {
 } Labyrinth;
 
 /**
+ * Initialise et retourne un pointeur vers un labyrinthe. 
+ * 
+ * La mémoire est allouée dynamiquement et doit donc être libérér manuellement
+ *  en utilisant free_labyrinth().
+ * 
+ * @param difficulty la difficulté du labyrinthe 
+ * @param height la hauteur du labyrinthe 
+ * @param width la largeur du labyrinthe 
+ * 
+ * @return un pointeur Labyrinth* si l'allocation réussie, NULL sinon.
+ */
+Labyrinth* allocate_labyrinth(int difficulty, int height, int width);
+
+/**
  * Permet de libérer la mémoire alloué pour un labyrinthe
  * 
  * @param labyrinth pointeur vers le labyrinthe à libérer
@@ -65,5 +79,14 @@ int is_valid_labyrinth_params(Difficulty difficulty, int height, int width);
  * @return le caractère représentant graphiquement cette cellule.
  */
 char get_cell_representation(Cell content);
+
+/**
+ * Permet d'obtenir la valeur de Cell représentée par un caractère spécifique.
+ * 
+ * @param c le caractère représentant la cellule.
+ * 
+ * @return Cell correspondant à ce caractère.
+ */
+Cell get_cell(char c);
 
 #endif
